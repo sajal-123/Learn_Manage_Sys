@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification</title>
+  <style>
+    /* Global styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #333;
+      font-weight: bold;
+    }
+    p {
+      color: #666;
+    }
+    .activation-code {
+      text-align: center;
+      font-size: 28px;
+      margin: 20px 0;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      margin-top: 20px;
+    }
+    .footer p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Welcome to LMS</h2>
+    </div>
+    <p>Hello <%= user.name %>,</p>
+    <p>Thank you for registering with us. Please use the following activation code to verify your email:</p>
+    <div class="activation-code"><%= activationCode %></div>
+    <p>If you didn't request this, please ignore this email.</p>
+    <p>Best regards,<br>Your App Team</p>
+    <div class="footer">
+      <p>&copy; <%= new Date().getFullYear() %> Your App Name. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
