@@ -11,6 +11,8 @@ import mongoose from 'mongoose';
 import SendEmail from '../utils/sendMails';
 import NotificationModel from '../models/Notification.Model';
 import { getAllCourseService } from '../services/course.service';
+
+
 export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const data = req.body;
@@ -70,7 +72,7 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
         }
         const course = await CourseModel.findById(courseId).select('-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links');
 
-        await redis.set(JSON.stringify(courseId), JSON.stringify(course))
+        await redis.set(JSON.stringify(courseId), JSON.stringify(course),'EX',604800) // 7 Days expire
 
         res.status(201).json(
             { success: true, course }
