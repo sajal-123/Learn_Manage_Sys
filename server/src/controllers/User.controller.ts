@@ -12,7 +12,7 @@ import SendEmail from '../utils/sendMails';
 import { CatchAsyncError } from '../middleware/CatchAsyncErrors';
 import { accessTokenOptions, refreshTokenOptions, sendToken } from '../utils/jwt';
 import { redis } from '../utils/redis';
-import { getUser } from '../services/user.service';
+import { getUser,getAllUserService } from '../services/user.service';
 import cloudinary from 'cloudinary'
 
 
@@ -352,5 +352,15 @@ export const UpdateProfilePicture = CatchAsyncError(async (req: Request, res: Re
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
+    }
+})
+
+
+// Only for admin
+export const GetAllUsers = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        getAllUserService(res);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 500));
     }
 })

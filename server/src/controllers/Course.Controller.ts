@@ -9,7 +9,8 @@ import ejs from 'ejs'
 import path from 'path';
 import mongoose from 'mongoose';
 import SendEmail from '../utils/sendMails';
-
+import NotificationModel from '../models/Notification.Model';
+import { getAllCourseService } from '../services/course.service';
 export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const data = req.body;
@@ -23,7 +24,7 @@ export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, 
                 url: myCloud.secure_url
             }
         }
-        await createCourse(data, res, next)
+        await createCourse(data, res)
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
@@ -150,6 +151,13 @@ export const addQuestion = CatchAsyncError(async (req: Request, res: Response, n
         }
         // Adding this question to our course content
         courseContent.question.push(newQuestion);
+
+        await NotificationModel.create({
+            user: req.user?._id,
+            title: "New Question Recieved",
+            message: `You have a new Question from  ${courseContent?.title}`
+        })
+
         await course?.save();
         res.status(200).json({
             success: true,
@@ -193,7 +201,13 @@ export const AddAnswer = CatchAsyncError(async (req: Request, res: Response, nex
         question.questionReplies?.push(newAnswer)
         await course?.save();
         if (req.user?._id === question.user._id) {
-            //   create a notification   
+            //   create a notification
+            await NotificationModel.create({
+                user: req.user?._id,
+                title: "New Answer reply Recieved",
+                message: `You have a new Question from  ${courseContent?.title}`
+            })
+
         } else {
             const data = {
                 name: question.user.name,
@@ -310,5 +324,15 @@ export const AddReplyToReview = CatchAsyncError(async (req: Request, res: Respon
         })
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
+    }
+})
+
+
+// Only for admin
+export const GetAllCourses = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        getAllCourseService(res);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 500));
     }
 })

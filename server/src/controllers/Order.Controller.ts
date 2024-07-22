@@ -8,7 +8,7 @@ import path from 'path';
 import SendEmail from '../utils/sendMails';
 import { CatchAsyncError } from '../middleware/CatchAsyncErrors';
 import CourseModel from '../models/course.model';
-import { newOrder } from '../services/Order.service';
+import { getAllOrderService, newOrder } from '../services/Order.service';
 import NotificationModel from '../models/Notification.Model';
 
 export const CreateOrder = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
@@ -65,7 +65,7 @@ export const CreateOrder = CatchAsyncError(async (req: Request, res: Response, n
             return next(new ErrorHandler(error.message, 500));
         }
 
-        user?.courses.push(course._id);
+        user?.courses.push(course?._id);
         await user?.save();
 
         await NotificationModel.create({
@@ -75,7 +75,7 @@ export const CreateOrder = CatchAsyncError(async (req: Request, res: Response, n
         })
 
         course.purchased ? course.purchased += 1 : course.purchased;
-        
+
         await course?.save();
         newOrder(data, res, next);
 
@@ -84,3 +84,14 @@ export const CreateOrder = CatchAsyncError(async (req: Request, res: Response, n
         return next(new ErrorHandler(error.message, 500));
     }
 });
+
+
+// Only for Admin
+
+export const getAllOrder = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        getAllOrderService(res);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 500));
+    }
+})
