@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerUser, ActivateUser, LoginReq, LogOut, UpdateAccessToken, getUserInfo, socialAuth, UpdateUser, UpdateUserPassword, UpdateProfilePicture, GetAllUsers } from '../controllers/User.controller';
+import { registerUser, ActivateUser, LoginReq, LogOut, UpdateAccessToken, getUserInfo, socialAuth, UpdateUser, UpdateUserPassword, UpdateProfilePicture, GetAllUsers, UpdateUserRole, DeleteUser } from '../controllers/User.controller';
 import { AuthorizedRole, isAuthenticated } from '../middleware/auth';
 
 const userRoute = Router();
@@ -15,6 +15,8 @@ userRoute.get('/social-auth',socialAuth);
 userRoute.put('/update-user-info',isAuthenticated,UpdateUser);
 userRoute.put('/update-user-password',isAuthenticated,UpdateUserPassword);
 userRoute.put('/update-user-avatar',isAuthenticated,UpdateProfilePicture);
-userRoute.get('/get-orders', isAuthenticated, AuthorizedRole(['admin']), GetAllUsers);
+userRoute.get('/get-users', isAuthenticated, AuthorizedRole(['admin']), GetAllUsers);
+userRoute.put('/update-user_role', isAuthenticated, AuthorizedRole(['admin']), UpdateUserRole);
+userRoute.delete('/delete-user/:id', isAuthenticated, AuthorizedRole(['admin']), DeleteUser);
 
 export { userRoute };

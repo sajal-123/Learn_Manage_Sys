@@ -12,7 +12,7 @@ import SendEmail from '../utils/sendMails';
 import { CatchAsyncError } from '../middleware/CatchAsyncErrors';
 import { accessTokenOptions, refreshTokenOptions, sendToken } from '../utils/jwt';
 import { redis } from '../utils/redis';
-import { getUser,getAllUserService } from '../services/user.service';
+import { getUser, getAllUserService, UpdateUserRoleService } from '../services/user.service';
 import cloudinary from 'cloudinary'
 
 
@@ -116,6 +116,7 @@ export const createActivationToken = (user: any): IActivationToken => {
     return { token, activation_code };
 };
 
+// verify User 
 export const ActivateUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { activation_token, activation_code } = req.body;
@@ -200,7 +201,6 @@ export const LogOut = CatchAsyncError(async (req: Request, res: Response, next: 
     }
 })
 
-
 // update access token
 export const UpdateAccessToken = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -236,7 +236,7 @@ export const UpdateAccessToken = CatchAsyncError(async (req: Request, res: Respo
     }
 })
 
-
+// get User Info
 export const getUserInfo = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.user?._id;
@@ -246,7 +246,7 @@ export const getUserInfo = CatchAsyncError(async (req: Request, res: Response, n
     }
 })
 
-
+// get social Auth
 export const socialAuth = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { name, email, avatar } = req.body as ISocialAuthBody;
@@ -263,7 +263,7 @@ export const socialAuth = CatchAsyncError(async (req: Request, res: Response, ne
     }
 })
 
-
+// Update User
 export const UpdateUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { name, email } = req.body as IUpdateUserInfo;
@@ -292,6 +292,7 @@ export const UpdateUser = CatchAsyncError(async (req: Request, res: Response, ne
     }
 })
 
+// Update User PRofilePassword
 export const UpdateUserPassword = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { oldPassword, newPassword } = req.body as IUpdateUserPassword;
@@ -318,7 +319,7 @@ export const UpdateUserPassword = CatchAsyncError(async (req: Request, res: Resp
     }
 })
 
-
+// Update User PRofilePicture
 export const UpdateProfilePicture = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { avatar } = req.body;
@@ -360,6 +361,37 @@ export const UpdateProfilePicture = CatchAsyncError(async (req: Request, res: Re
 export const GetAllUsers = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         getAllUserService(res);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 500));
+    }
+})
+
+// Update User Role Only for Admin
+export const UpdateUserRole = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id, role } = req.body;
+        UpdateUserRoleService(id, role, res);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 500));
+    }
+})
+
+// Delete User ---- only for admin
+
+export const DeleteUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const user = await UserModel.findById(id);
+        if (!user) {
+            return next(new ErrorHandler('User Not found', 500));
+        }
+        await user.deleteOne({ id });
+        await redis.del(id);
+
+        res.status(200).json({
+            success: true,
+            message: "User deleted Successfully"
+        })
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 500));
     }

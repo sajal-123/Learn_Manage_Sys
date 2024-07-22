@@ -26,7 +26,6 @@ app.get('*', (req: Request, res: Response, next: NextFunction) => {
     next(error)
 })
 
-
 app.use(errorHandleMiddleware)
 
 export { app };
