@@ -1,15 +1,30 @@
 'use client'
-import React, { FC, useState } from "react"
-
+import React, { FC, useState } from 'react';
+import { Header } from './components/Header'
+import Heading from './utils/Heading'
+import { Hero } from './components/Routes/Hero';
 interface Props { };
 
+const Page: FC<Props> = (props) => {
+  const [open, setOpen] = useState(false)
+  const [activeItem, setActiveItem] = useState(0)
 
-const page: FC<Props> = () => {
   return (
     <div>
-
+      <Heading
+        title='ELearning'
+        description='A platform to learn and grow with fun'
+        keywords='ReactJs,NextJs,MONGO'
+      />
+      <Header
+        open={open}
+        setOpen={setOpen}
+        activaItem={activeItem}
+      />
+      <Hero/>
     </div>
-  )
+  );
 }
 
-export default page
+
+export default Page
