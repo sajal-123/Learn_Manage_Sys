@@ -14,7 +14,7 @@ const Page: FC<Props> = (props) => {
       <Heading
         title='ELearning'
         description='A platform to learn and grow with fun'
-        keywords='ReactJs,NextJs,MONGO'
+        keywords='ReactJs,NextJs,MONGO_DB'
       />
       <Header
         open={open}
