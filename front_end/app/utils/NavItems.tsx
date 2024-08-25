@@ -3,7 +3,8 @@ import React, { FC } from 'react'
 
 interface Props {
     isMobile: boolean,
-    activaItem: number
+    activaItem: number,
+    setOpenSidebar:()=>void;
 }
 
 export const NavItemsData = [
@@ -48,6 +49,7 @@ const NavItems: FC<Props> = (props: Props) => {
                                 <span className={'text-[25px] font-Poppins font-500 text-black dark:text-white'}>
                                     ELearning</span>
                             </Link>
+                            <div onClick={props.setOpenSidebar}>cut</div>
                         </div>
                         {NavItemsData && NavItemsData.map((i, index) => (
                             <Link key={index} href={`${i.url}`} passHref>

@@ -44,7 +44,7 @@ const Header: FC<Props> = (props: Props) => {
                             </Link>
                         </div>
                         <div className="flex items-center gap-2">
-                            <NavItems activaItem={props.activaItem} isMobile={false} />
+                            <NavItems activaItem={props.activaItem} isMobile={false} setOpenSidebar={()=>(setOpenSidebar(false))}/>
                             <ThemeSwitcher />
 
                             {/* Only for mobile */}

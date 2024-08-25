@@ -8,7 +8,6 @@ interface HeadProps {
 }
 
 const Heading: FC<HeadProps> = ({ title, description, keywords }) => {
-  console.log(title)
   return (
     <div>
       <title>{title}</title>
