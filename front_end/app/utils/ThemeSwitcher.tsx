@@ -11,7 +11,7 @@ export const ThemeSwitcher = () => {
     useEffect(() => setMounted(true), []);
     if (!mounted) return null
     return (
-        <div className=' flex items-center justify-center '>
+        <div className=' flex items-center justify-center mx-2'>
             {
                 theme === "light" ? (
                     <BiMoon className='cursor-pointer' fill='black' size={25} onClick={()=>setTheme("dark")} />

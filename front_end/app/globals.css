@@ -41,7 +41,7 @@ body {
   animation: changeBackgroundColor 8s infinite alternate;
 }
 
-@keyframes changeBckgroundColor {
+@keyframes changeBackgroundColor {
   0%,
   100% {
     opacity: 1;

@@ -23,12 +23,12 @@ app.use(cors(
     }
 ))
 
-app.use('/api/v1/users', userRoute);
-app.use('/api/v1/courses', courseRoute);
-app.use('/api/v1/order', orderRoute);
-app.use('/api/v1/notify', notificationRoute);
-app.use('/api/v1/analytics', analyticRouter);
-app.use('/api/v1/layout', LayoutRouter);
+// app.use('/api/v1/users', userRoute);
+// app.use('/api/v1/courses', courseRoute);
+// app.use('/api/v1/order', orderRoute);
+// app.use('/api/v1/notify', notificationRoute);
+// app.use('/api/v1/analytics', analyticRouter);
+// app.use('/api/v1/layout', LayoutRouter);
 
 
 app.get('*', (req: Request, res: Response, next: NextFunction) => {

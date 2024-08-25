@@ -4,6 +4,8 @@ import Link from 'next/link';
 import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from 'react-icons/hi';
+import { IoIosClose } from "react-icons/io";
+
 type Props = {
     open: boolean,
     setOpen: (open: boolean) => void,
@@ -44,13 +46,18 @@ const Header: FC<Props> = (props: Props) => {
                             </Link>
                         </div>
                         <div className="flex items-center gap-2">
-                            <NavItems activaItem={props.activaItem} isMobile={false} setOpenSidebar={()=>(setOpenSidebar(false))}/>
+                            <NavItems activaItem={props.activaItem} isMobile={false}/>
                             <ThemeSwitcher />
 
                             {/* Only for mobile */}
                             <div className="800px:hidden">
-                                <HiOutlineMenuAlt3 size={25} className='cursor-pointer dark:text-white text-black' onClick={() => setOpenSidebar(true)} />
+                                {
+                                    !openSideBar?
+                                    (<HiOutlineMenuAlt3 size={25} className='cursor-pointer dark:text-white text-black' onClick={() => setOpenSidebar(true)} />):
+                                    (<IoIosClose size={25} className='cursor-pointer dark:text-white text-black' onClick={() => setOpenSidebar(false)} />)
+                                }
                             </div>
+                            {/* ---------------- */}
                             <HiOutlineUserCircle size={25} className='800px:block hidden cursor-pointer dark:text-white text-black' onClick={() => props.setOpen(true)} />
                         </div>
                     </div>
@@ -58,8 +65,8 @@ const Header: FC<Props> = (props: Props) => {
                 {/* For mobile sidebar */}
                 {
                     openSideBar && (
-                        <div className='fiexd w-full h-screen top-0 left-0 z-[99999] dark:bg-[unset] bg-[#00000024]' onClick={(e) => HandleClose(e)} id='screen'>
-                            <div className='w-[70%] fixed h-screen z-[9999999] bg-white dark:bg-slate-900 dark:opacity-90 top-0 right-0'>
+                        <div className='fiexd w-full  h-screen top-0 left-0 z-[99999] dark:bg-[unset] bg-[#00000024]' onClick={(e) => HandleClose(e)} id='screen'>
+                            <div className='w-[70%] fixed h-screen z-[9999999] bg-white dark:bg-slate-900 dark:opacity-90 top-20 right-0'>
                                 <NavItems activaItem={props.activaItem} isMobile={true} />
                                 <HiOutlineUserCircle size={25} className='cursor-pointer ml-5 my-2 dark:text-white text-black' onClick={() => props.setOpen(true)} />
                                     <br />
