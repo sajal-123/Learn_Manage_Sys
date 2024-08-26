@@ -5,11 +5,14 @@ import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from 'react-icons/hi';
 import { IoIosClose } from "react-icons/io";
-
+import {Login} from '../components/Login'
+import  {CustomModal} from '../utils/CustomModel'
 type Props = {
     open: boolean,
     setOpen: (open: boolean) => void,
     activaItem: number
+    route?:string,
+    setRoute?:(route:string)=>void
 };
 
 const Header: FC<Props> = (props: Props) => {
@@ -77,6 +80,18 @@ const Header: FC<Props> = (props: Props) => {
                     )
                 }
             </div>
+            {
+                props.open && (
+                    <CustomModal
+                    open={props.open}
+                    setOpen={props.setOpen}
+                    activeItem={props.activaItem}
+                    setRoute={props.setRoute}
+                    component={Login}
+                    
+                    />
+                )
+            }
         </div>
     )
 }
