@@ -8,7 +8,7 @@ interface Props { }
 
 const Hero: FC<Props> = (props) => {
   return (
-    <div className='w-full flex items-center'>
+    <div className='w-full flex items-center min-h-[90vh]'>
       <div className="left-0 md:flex max-md:flex-col w-full 1500px:h-[700px] items-center  1000px:h-[600px]  rounded-full">
         <div className="1000px:w-[40%] m-12 md:m-4  aspect-square  rounded-full flex justify-center hero_animation 1500px:w-[50%] 1000px:min-h-[40%] items-center z-10">
           <Image

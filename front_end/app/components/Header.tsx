@@ -5,14 +5,16 @@ import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from 'react-icons/hi';
 import { IoIosClose } from "react-icons/io";
-import {Login} from '../components/Login'
-import  {CustomModal} from '../utils/CustomModel'
+import { Login } from '../components/Login'
+import { CustomModal } from '../utils/CustomModel'
+import { SignUp } from './Sign-Up';
+import { Verification } from './Verification';
 type Props = {
     open: boolean,
     setOpen: (open: boolean) => void,
     activaItem: number
-    route?:string,
-    setRoute?:(route:string)=>void
+    route?: string,
+    setRoute?: (route: string) => void
 };
 
 const Header: FC<Props> = (props: Props) => {
@@ -49,15 +51,15 @@ const Header: FC<Props> = (props: Props) => {
                             </Link>
                         </div>
                         <div className="flex items-center gap-2">
-                            <NavItems activaItem={props.activaItem} isMobile={false}/>
+                            <NavItems activaItem={props.activaItem} isMobile={false} />
                             <ThemeSwitcher />
 
                             {/* Only for mobile */}
                             <div className="800px:hidden">
                                 {
-                                    !openSideBar?
-                                    (<HiOutlineMenuAlt3 size={25} className='cursor-pointer dark:text-white text-black' onClick={() => setOpenSidebar(true)} />):
-                                    (<IoIosClose size={25} className='cursor-pointer dark:text-white text-black' onClick={() => setOpenSidebar(false)} />)
+                                    !openSideBar ?
+                                        (<HiOutlineMenuAlt3 size={25} className='cursor-pointer dark:text-white text-black' onClick={() => setOpenSidebar(true)} />) :
+                                        (<IoIosClose size={25} className='cursor-pointer dark:text-white text-black' onClick={() => setOpenSidebar(false)} />)
                                 }
                             </div>
                             {/* ---------------- */}
@@ -71,24 +73,53 @@ const Header: FC<Props> = (props: Props) => {
                         <div className='fiexd w-full  h-screen top-0 left-0 z-[99999] dark:bg-[unset] bg-[#00000024]' onClick={(e) => HandleClose(e)} id='screen'>
                             <div className='w-[70%] fixed h-screen z-[9999999] bg-white dark:bg-slate-900 dark:opacity-90 top-20 right-0'>
                                 <NavItems activaItem={props.activaItem} isMobile={true} />
-                                <HiOutlineUserCircle size={25} className='cursor-pointer ml-5 my-2 dark:text-white text-black' onClick={() => props.setOpen(true)} />
-                                    <br />
-                                    <br />
-                                    <p>Copyright @ 2023 learning</p>
+                                <HiOutlineUserCircle size={25} className='cursor-pointer ml-5 my-2 dark:text-white text-black' onClick={() => {
+                                    props.setOpen(true)
+                                    setOpenSidebar(false)
+                                }} />
+                                <br />
+                                <br />
+                                <p>Copyright @ 2023 learning</p>
                             </div>
                         </div>
                     )
                 }
             </div>
             {
-                props.open && (
+                props.route == "Login" && (
+                    props.open &&
                     <CustomModal
-                    open={props.open}
-                    setOpen={props.setOpen}
-                    activeItem={props.activaItem}
-                    setRoute={props.setRoute}
-                    component={Login}
-                    
+                        open={props.open}
+                        setOpen={props.setOpen}
+                        activeItem={props.activaItem}
+                        setRoute={props.setRoute}
+                        component={Login}
+                    />
+                )
+            }
+            {
+                props.route == "Sign-Up" &&
+                props.open &&
+                (
+                    <CustomModal
+                        open={props.open}
+                        setOpen={props.setOpen}
+                        activeItem={props.activaItem}
+                        setRoute={props.setRoute}
+                        component={SignUp}
+                    />
+                )
+            }
+            {
+                props.route == "Verification" &&
+                props.open &&
+                (
+                    <CustomModal
+                        open={props.open}
+                        setOpen={props.setOpen}
+                        activeItem={props.activaItem}
+                        setRoute={props.setRoute}
+                        component={Verification}
                     />
                 )
             }

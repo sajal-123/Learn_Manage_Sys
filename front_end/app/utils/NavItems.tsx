@@ -48,7 +48,6 @@ const NavItems: FC<Props> = (props: Props) => {
                     >
                         {item.name}
                     </span>
-                    
                 </Link>
             ))}
             </div>
