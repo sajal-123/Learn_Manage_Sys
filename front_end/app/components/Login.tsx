@@ -24,6 +24,7 @@ const Login: FC<Props> = ({ setRoute }) => {
         onSubmit: (values) => {
             const { email, password } = values
             console.log(email, password)
+            setRoute("Verification")
         }
     })
 

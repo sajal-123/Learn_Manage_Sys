@@ -62,3 +62,10 @@ body {
     opacity: 0.4;
   }
 }
+
+/* for chrome safari Edge Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
