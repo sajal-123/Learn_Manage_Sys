@@ -61,6 +61,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
                 {
                     Object.keys(verifyNumber).map((key, index) => (
                         <input
+                        type='number'
                             key={key}
                             ref={inputRefs[index]}
                             className={`w-[45px] h-[45px] bg-transparent border-[2px] flex items-center justify-center text-black rounded-lg dark:text-white text-[18px] font-Poppins outline-none text-center ${invalidError ? "shake border-red-500" : "dark:border-white border-[#0000004a]"}`}
@@ -83,7 +84,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
             <h5 className='text-center pt-4 font-Poppins text-[14px]'>
                 Go back to sign in?{" "}
                 <span className='text-blue-600 pl-1 cursor-pointer' onClick={() => setRoute("Login")}>
-                    Login
+                    sgn in
                 </span>
             </h5>
         </div>
