@@ -19,11 +19,13 @@ app.use(cookieParser())
 
 app.use(cors(
     {
-        origin: process.env.ORIGIN
+        origin: ['http://localhost:3000'],
+        credentials:true
+        // origin: process.env.ORIGIN
     }
 ))
 
-// app.use('/api/v1/users', userRoute);
+app.use('/api/v1/users', userRoute);
 // app.use('/api/v1/courses', courseRoute);
 // app.use('/api/v1/order', orderRoute);
 // app.use('/api/v1/notify', notificationRoute);

@@ -3,7 +3,7 @@ require('dotenv').config();
 import {v2 as cloudinary} from 'cloudinary'
 import {app} from './app'
 import { connectDB } from './src/utils/DB';
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 
 cloudinary.config({

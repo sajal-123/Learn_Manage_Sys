@@ -59,48 +59,51 @@ interface IUpdateProfilePicture {
 
 export const registerUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     const { email, name, password }: IRegistration = req.body;
+           console.log(email,name,password)
+           return res.status(201).json({
+            success: true
+        })
+    // try {
+    //     // Check if user with the same email already exists
+    //     if (!email || !name || !password) {
+    //         return next(new ErrorHandler('provide mandatory credentials', 400));
 
-    try {
-        // Check if user with the same email already exists
-        if (!email || !name || !password) {
-            return next(new ErrorHandler('provide mandatory credentials', 400));
+    //     }
+    //     const existingUser = await UserModel.findOne({ email });
 
-        }
-        const existingUser = await UserModel.findOne({ email });
+    //     if (existingUser) {
+    //         return next(new ErrorHandler('User with this email already exists', 400));
+    //     }
 
-        if (existingUser) {
-            return next(new ErrorHandler('User with this email already exists', 400));
-        }
+    //     // Create user in the database
+    //     const user: IRegistration = new UserModel({
+    //         name,
+    //         email,
+    //         password,
+    //     });
 
-        // Create user in the database
-        const user: IRegistration = new UserModel({
-            name,
-            email,
-            password,
-        });
+    //     const ActivationToken = createActivationToken(user);
+    //     const activationCode = ActivationToken.activation_code;
 
-        const ActivationToken = createActivationToken(user);
-        const activationCode = ActivationToken.activation_code;
+    //     const data = { user: { name: user.name }, activationCode }
+    //     const html = await ejs.render(path.join(__dirname, '../mails/activation_mail.ejs'), data
+    //     )
+    //     try {
+    //         console.log(email, password, name)
+    //         await SendEmail({
+    //             email: user.email,
+    //             subject: "Activate Your Account",
+    //             template: 'activation_mail.ejs',
+    //             data
+    //         })
+    //         return res.status(201).json({ success: true, message: `please check your eamil->${user.email} to activate your account!!!`, ActivationToken: ActivationToken.token })
+    //     } catch (error: any) {
+    //         return next(new ErrorHandler(error.message, 400));
+    //     }
 
-        const data = { user: { name: user.name }, activationCode }
-        const html = await ejs.render(path.join(__dirname, '../mails/activation_mail.ejs'), data
-        )
-        try {
-            console.log(email, password, name)
-            await SendEmail({
-                email: user.email,
-                subject: "Activate Your Account",
-                template: 'activation_mail.ejs',
-                data
-            })
-            return res.status(201).json({ success: true, message: `please check your eamil->${user.email} to activate your account!!!`, ActivationToken: ActivationToken.token })
-        } catch (error: any) {
-            return next(new ErrorHandler(error.message, 400));
-        }
-
-    } catch (error: any) {
-        return next(new ErrorHandler(error.message, 400));
-    }
+    // } catch (error: any) {
+    //     return next(new ErrorHandler(error.message, 400));
+    // }
 });
 
 
