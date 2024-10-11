@@ -20,7 +20,7 @@ const Schema = Yup.object().shape({
 
 const SignUp: FC<Props> = ({ setRoute }) => {
     const [show, setShow] = useState(false)
-    const [register, { error, data, isSuccess }] = useRegisterMutation();
+    const [register, { data,error, isSuccess }] = useRegisterMutation();
 
     useEffect(() => {
         if (isSuccess) {
@@ -43,7 +43,12 @@ const SignUp: FC<Props> = ({ setRoute }) => {
         onSubmit: async (values) => {
             const { name, email, password } = values
             console.log(name, email, password)
-            await register({ name, email, password })
+            const data={
+                name,
+                email,
+                password
+            }
+            await register({name,email,password})
         }
     })
 

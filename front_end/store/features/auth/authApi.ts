@@ -7,8 +7,8 @@ type RegistrationResponse = {
 }
 
 type RegistrationData = {
-    message: string;
-    activationToken: string;
+    // message: string;
+    // activationToken: string;
 }
 
 export const authApi = apiSlice.injectEndpoints({
@@ -19,7 +19,7 @@ export const authApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data,
                 credentials: "include" as const, // Fixed spelling here
-            }),
+            }), 
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     const result = await queryFulfilled;

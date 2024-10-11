@@ -34,7 +34,7 @@ const SendEmail = async (options: EmailOptions): Promise<void> => {
             subject,
             html,
         };
-
+        console.log(process.env.SMTP_EMAIL,process.env.SMTPPORT,process.env.SMTP_PASSWORD,process.env.SMTPSERVICE,process.env.SMTPHOST)
         await transporter.sendMail(mailOptions);
     } catch (error) {
         console.error(`Error sending email to ${options.email}:`, error);

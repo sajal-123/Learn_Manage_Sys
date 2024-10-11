@@ -59,51 +59,48 @@ interface IUpdateProfilePicture {
 
 export const registerUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     const { email, name, password }: IRegistration = req.body;
-           console.log(email,name,password)
-           return res.status(201).json({
-            success: true
-        })
-    // try {
-    //     // Check if user with the same email already exists
-    //     if (!email || !name || !password) {
-    //         return next(new ErrorHandler('provide mandatory credentials', 400));
+    console.log(email, name, password)
+    try {
+        // Check if user with the same email already exists
+        if (!email || !name || !password) {
+            return next(new ErrorHandler('provide mandatory credentials', 400));
 
-    //     }
-    //     const existingUser = await UserModel.findOne({ email });
+        }
+        const existingUser = await UserModel.findOne({ email });
 
-    //     if (existingUser) {
-    //         return next(new ErrorHandler('User with this email already exists', 400));
-    //     }
+        if (existingUser) {
+            return next(new ErrorHandler('User with this email already exists', 400));
+        }
 
-    //     // Create user in the database
-    //     const user: IRegistration = new UserModel({
-    //         name,
-    //         email,
-    //         password,
-    //     });
+        // Create user in the database
+        const user: IRegistration = new UserModel({
+            name,
+            email,
+            password,
+        });
 
-    //     const ActivationToken = createActivationToken(user);
-    //     const activationCode = ActivationToken.activation_code;
+        const ActivationToken = createActivationToken(user);
+        const activationCode = ActivationToken.activation_code;
 
-    //     const data = { user: { name: user.name }, activationCode }
-    //     const html = await ejs.render(path.join(__dirname, '../mails/activation_mail.ejs'), data
-    //     )
-    //     try {
-    //         console.log(email, password, name)
-    //         await SendEmail({
-    //             email: user.email,
-    //             subject: "Activate Your Account",
-    //             template: 'activation_mail.ejs',
-    //             data
-    //         })
-    //         return res.status(201).json({ success: true, message: `please check your eamil->${user.email} to activate your account!!!`, ActivationToken: ActivationToken.token })
-    //     } catch (error: any) {
-    //         return next(new ErrorHandler(error.message, 400));
-    //     }
+        const data = { user: { name: user.name }, activationCode }
+        const html = await ejs.render(path.join(__dirname, '../mails/activation_mail.ejs'), data
+        )
+        try {
+            console.log(email, password, name)
+            await SendEmail({
+                email: user.email,
+                subject: "Activate Your Account",
+                template: 'activation_mail.ejs',
+                data
+            })
+            return res.status(201).json({ success: true, message: `please check your eamil->${user.email} to activate your account!!!`, ActivationToken: ActivationToken.token })
+        } catch (error: any) {
+            return next(new ErrorHandler(error.message, 400));
+        }
 
-    // } catch (error: any) {
-    //     return next(new ErrorHandler(error.message, 400));
-    // }
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
 });
 
 
@@ -189,55 +186,56 @@ export const LoginReq = CatchAsyncError(async (req: Request, res: Response, next
 
 
 export const LogOut = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        res.cookie('access_token', '', { maxAge: 1 })
-        res.cookie('refresh_token', '', { maxAge: 1 })
-        const userId = req.user?._id || '';
-        redis.del(JSON.stringify(userId));
-        res.status(200).json({
-            success: true,
-            message: "LogOut successFully"
-        })
+    // try {
+    //     res.cookie('access_token', '', { maxAge: 1 })
+    //     res.cookie('refresh_token', '', { maxAge: 1 })
+    //     if (!req || !req.user) return next(new ErrorHandler("Please Login First", 400));
+    //     const userId = req.user?._id || '';
+    //     redis.del(JSON.stringify(userId));
+    //     res.status(200).json({
+    //         success: true,
+    //         message: "LogOut successFully"
+    //     })
 
-    } catch (error: any) {
-        return next(new ErrorHandler(error.message, 400));
-    }
+    // } catch (error: any) {
+    //     return next(new ErrorHandler(error.message, 400));
+    // }
 })
 
 // update access token
 export const UpdateAccessToken = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const refresh_token = req.cookies.refresh_token as string;
-        const decoded = jwt.verify(refresh_token, process.env.REFRESH_TOKEN as string) as JwtPayload;
-        if (!decoded) {
-            return next(new ErrorHandler('Could Not refresh Token', 400));
-        }
-        const session = await redis.get(JSON.stringify(decoded.id))
-        if (!session) {
-            return next(new ErrorHandler('please Login to access This resource', 400));
-        }
-        const user = JSON.parse(session);
-        const accessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN as string, {
-            expiresIn: '5m'
-        });
-        const refreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN as string, {
-            expiresIn: '3d'
-        });
+    // try {
+    //     const refresh_token = req.cookies.refresh_token as string;
+    //     const decoded = jwt.verify(refresh_token, process.env.REFRESH_TOKEN as string) as JwtPayload;
+    //     if (!decoded) {
+    //         return next(new ErrorHandler('Could Not refresh Token', 400));
+    //     }
+    //     const session = await redis.get(JSON.stringify(decoded.id))
+    //     if (!session) {
+    //         return next(new ErrorHandler('please Login to access This resource', 400));
+    //     }
+    //     const user = JSON.parse(session);
+    //     const accessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN as string, {
+    //         expiresIn: '5m'
+    //     });
+    //     const refreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN as string, {
+    //         expiresIn: '3d'
+    //     });
 
-        req.user = user;
+    //     req.user = user;
 
-        res.cookie('refresh_token', refreshToken, refreshTokenOptions);
-        res.cookie('access_token', accessToken, accessTokenOptions);
-        
-        await redis.set(user._id,JSON.stringify(user),'EX',604800); // 7Days
-        res.status(200).json({
-            success: true,
-            accessToken
-        });
+    //     res.cookie('refresh_token', refreshToken, refreshTokenOptions);
+    //     res.cookie('access_token', accessToken, accessTokenOptions);
 
-    } catch (error: any) {
-        return next(new ErrorHandler(error.message, 400));
-    }
+    //     await redis.set(user._id, JSON.stringify(user), 'EX', 604800); // 7Days
+    //     res.status(200).json({
+    //         success: true,
+    //         accessToken
+    //     });
+
+    // } catch (error: any) {
+    //     return next(new ErrorHandler(error.message, 400));
+    // }
 })
 
 // get User Info
