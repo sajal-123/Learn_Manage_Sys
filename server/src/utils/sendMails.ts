@@ -1,9 +1,7 @@
 import nodemailer, { Transporter } from 'nodemailer';
 import path from 'path';
 import ejs from 'ejs';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { env } from './EnviromentHandler';
 
 interface EmailOptions {
     email: string;
@@ -15,12 +13,12 @@ interface EmailOptions {
 const SendEmail = async (options: EmailOptions): Promise<void> => {
     try {
         const transporter: Transporter = nodemailer.createTransport({
-            host: process.env.SMTPHOST,
-            service: process.env.SMTPSERVICE,
-            port: parseInt(process.env.SMTPPORT || '587'),
+            host: env.smtp.host,
+            service: env.smtp.service,
+            port: parseInt(env.smtp.port || '587'),
             auth: {
-                user: process.env.SMTP_EMAIL,
-                pass: process.env.SMTP_PASSWORD,
+                user: env.smtp.email,
+                pass: env.smtp.password,
             },
         });
 
@@ -34,7 +32,6 @@ const SendEmail = async (options: EmailOptions): Promise<void> => {
             subject,
             html,
         };
-        console.log(process.env.SMTP_EMAIL,process.env.SMTPPORT,process.env.SMTP_PASSWORD,process.env.SMTPSERVICE,process.env.SMTPHOST)
         await transporter.sendMail(mailOptions);
     } catch (error) {
         console.error(`Error sending email to ${options.email}:`, error);

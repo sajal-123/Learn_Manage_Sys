@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-require('dotenv').config();
+import { env } from "./EnviromentHandler";
 
-const MongoUrl: string = process.env.MONGO_URL || ''
+const MongoUrl: string = env.mongoUrl || ''
 
 // Function to connect to MongoDB
 const connectDB = async () => {

@@ -3,8 +3,7 @@ import { CatchAsyncError } from "./CatchAsyncErrors";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { redis } from "../utils/redis";
-require('dotenv').config();
-
+import { env } from "../utils/EnviromentHandler";
 
 export const isAuthenticated = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -13,7 +12,7 @@ export const isAuthenticated = CatchAsyncError(async (req: Request, res: Respons
             return next(new ErrorHandler("Not Authorized Login First", 400));
         }
 
-        const decoded = jwt.verify(access_token, process.env.ACCESS_TOKEN as string) as JwtPayload;
+        const decoded = jwt.verify(access_token, env.auth.accessToken as string) as JwtPayload;
         if (!decoded) {
             return next(new ErrorHandler("AccessToken is Not valid", 400));
         }

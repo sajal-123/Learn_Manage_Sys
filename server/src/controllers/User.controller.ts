@@ -1,5 +1,3 @@
-// controllers/userController.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { UserModel } from '../models/User.Model';
 import { ErrorHandler } from '../utils/ErrorHandler';

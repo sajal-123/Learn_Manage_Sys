@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserModel } from '../models/User.Model';
 import { ErrorHandler } from '../utils/ErrorHandler';
-import dotenv from 'dotenv';
-dotenv.config();
+import { env } from '../utils/EnviromentHandler';
 import ejs from 'ejs';
 import path from 'path';
 import SendEmail from '../utils/sendMails';

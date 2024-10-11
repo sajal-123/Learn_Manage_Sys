@@ -1,16 +1,16 @@
-require('dotenv').config();
+import { env } from './src/utils/EnviromentHandler';
 import { v2 as cloudinary } from 'cloudinary';
 import { app } from './app';
 import { connectDB } from './src/utils/DB';
 import { redis } from './src/utils/redis'; // Import your Redis client
 
-const port = process.env.PORT || 8000;
+const port = env.port || 8000;
 
 // Cloudinary configuration
 cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_SECRET_KEY,
+  cloud_name: env.cloud.name,
+  api_key: env.cloud.apiKey,
+  api_secret: env.cloud.secretKey,
 });
 
 // Function to initialize Redis and database connection

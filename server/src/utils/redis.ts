@@ -36,11 +36,11 @@
 // -----------------------------------------------------------------------------
 
 import Redis from 'ioredis';
-
+import { env } from './EnviromentHandler';
 const redisClient = () => {
-  if (process.env.REDIS_URL) {
+  if (env.redis.url) {
     console.log('Redis configuration set.');
-    return process.env.REDIS_URL;
+    return env.redis.url;
   }
   throw new Error('Redis connection failed: REDIS_URL is not defined.');
 };

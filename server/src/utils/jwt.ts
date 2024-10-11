@@ -1,9 +1,7 @@
 import { IUser } from "../models/User.Model";
 import { Response } from "express";
 import { redis } from './redis';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { env } from "./EnviromentHandler";
 
 interface ITokenOptions {
     expires: Date;
@@ -14,8 +12,8 @@ interface ITokenOptions {
 }
 
 
-export const accessTokenExpire = parseInt(process.env.ACCESS_TOKEN_EXPIRE || '300', 10);
-export const refreshTokenExpire = parseInt(process.env.REFRESH_TOKEN_EXPIRE || '1200', 10);
+export const accessTokenExpire = parseInt(env.auth.accessTokenExpire || '300', 10);
+export const refreshTokenExpire = parseInt(env.auth.refreshTokenExpire || '1200', 10);
 
 export const accessTokenOptions: ITokenOptions = {
     expires: new Date(Date.now() + accessTokenExpire * 60 * 60 * 1000),

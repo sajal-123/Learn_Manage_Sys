@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
-require('dotenv').config();
 const emailRegexPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 import jwt from 'jsonwebtoken'
+import { env } from '../utils/EnviromentHandler';
 
 // Define the interface for the User model
 export interface IUser extends Document {
@@ -83,13 +83,13 @@ userSchema.pre<IUser>('save', async function (next) {
 });
 
 userSchema.methods.signAccessToken = function () {
-    return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN || '',{
+    return jwt.sign({ id: this._id }, env.auth.accessToken || '',{
         expiresIn:'5m'
     })
 }
 
 userSchema.methods.signRefreshToken = function () {
-    return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || '',{
+    return jwt.sign({ id: this._id }, env.auth.refreshToken || '',{
         expiresIn:'3d'
     })
 }

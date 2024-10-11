@@ -1,7 +1,6 @@
 import cookieParser from "cookie-parser";
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
-require('dotenv').config();
 const app = express();
 import { errorHandleMiddleware } from "./src/middleware/error";
 import { userRoute } from "./src/Routes/User.Route";
@@ -10,6 +9,7 @@ import { orderRoute } from "./src/Routes/Order.Route";
 import { notificationRoute } from "./src/Routes/Notification.Route";
 import { analyticRouter } from "./src/Routes/Analytics.Route";
 import { LayoutRouter } from "./src/Routes/Layout.Route";
+import { env } from "./src/utils/EnviromentHandler";
 
 
 
@@ -19,9 +19,9 @@ app.use(cookieParser())
 
 app.use(cors(
     {
-        origin: ['http://localhost:3000'],
-        credentials:true
-        // origin: process.env.ORIGIN
+        // origin: ['http://localhost:3000'],
+        credentials:true,
+        origin: env.origin
     }
 ))
 
