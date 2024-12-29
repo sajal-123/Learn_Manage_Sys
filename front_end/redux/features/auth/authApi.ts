@@ -23,10 +23,14 @@ export const authApi = apiSlice.injectEndpoints({
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     const result = await queryFulfilled;
+                    console.log(result)
                     console.log("Register Query")
+                    // console.log(result.data.ActivationToken)
+                    // console.log(result.data.message)
+                    // console.log(result.data)
                     dispatch(
                         userRegistration({
-                            token: result.data.activationToken
+                            token: result.data
                         })
                     );
                 } catch (error: any) {

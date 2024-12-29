@@ -57,7 +57,6 @@ interface IUpdateProfilePicture {
 
 export const registerUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     const { email, name, password }: IRegistration = req.body;
-    console.log(email, name, password)
     try {
         // Check if user with the same email already exists
         if (!email || !name || !password) {
@@ -81,7 +80,7 @@ export const registerUser = CatchAsyncError(async (req: Request, res: Response, 
         const activationCode = ActivationToken.activation_code;
 
         const data = { user: { name: user.name }, activationCode }
-        const html = await ejs.render(path.join(__dirname, '../mails/activation_mail.ejs'), data
+        const html = ejs.render(path.join(__dirname, '../mails/activation_mail.ejs'), data
         )
         try {
             console.log(email, password, name)
@@ -91,8 +90,21 @@ export const registerUser = CatchAsyncError(async (req: Request, res: Response, 
                 template: 'activation_mail.ejs',
                 data
             })
-            return res.status(201).json({ success: true, message: `please check your eamil->${user.email} to activate your account!!!`, ActivationToken: ActivationToken.token })
-        } catch (error: any) {
+            console.log(user)
+            return res
+            .status(201)
+            .cookie("access_token", ActivationToken.token, {
+            //   httpOnly: true, // Ensures the cookie is not accessible via client-side JavaScript
+            //   secure: process.env.NODE_ENV === "production", // Ensures the cookie is only sent over HTTPS in production
+            //   sameSite: "strict", // Prevents CSRF
+            maxAge: accessTokenOptions.maxAge
+            })
+            .json({
+              success: true,
+              message: `Please check your email (${user.email}) to activate your account!`,
+              ActivationToken: ActivationToken.token,
+            });
+                  } catch (error: any) {
             return next(new ErrorHandler(error.message, 400));
         }
 
@@ -123,8 +135,6 @@ export const ActivateUser = CatchAsyncError(async (req: Request, res: Response, 
             user: IUser, activation_code: string
         } = jwt.verify(activation_token, process.env.JWT_SECRET as string) as { user: IUser, activation_code: string }
 
-        console.log(newUser.activation_code);
-        console.log(activation_code);
 
         if (newUser.activation_code !== activation_code) {
             return next(new ErrorHandler('Activation code does not match', 400));
