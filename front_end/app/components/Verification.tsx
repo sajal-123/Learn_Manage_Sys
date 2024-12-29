@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 import { VscWorkspaceTrusted } from 'react-icons/vsc'
 import { styles } from '../styles/style'
 import { useSelector } from 'react-redux'
-import { useActivationMutation } from '@/store/features/auth/authApi'
+import { useActivationMutation } from '@/redux/features/auth/authApi'
 
 type Props = {
     setRoute: (route: string) => void
@@ -16,25 +16,25 @@ type VerifyNumber = {
     "3": string,
 }
 const Verification: FC<Props> = ({ setRoute }) => {
-    const {token}=useSelector((state:any)=>state.auth);
+    const { token } = useSelector((state: any) => state.auth);
     const [invalidError, setInvalidError] = useState<boolean>(false);
-    const [activation,{isSuccess,error}]=useActivationMutation();
+    const [activation, { isSuccess, error }] = useActivationMutation();
 
-    useEffect(()=>{
-      if(isSuccess){
-        toast.success("Account Activated")
-        setRoute("Login")
-      }
-      if(error){
-        if("data" in error){
-          const errorData=error as any
-          toast.error(errorData.data.message)
-          setInvalidError(true)
-        }else{
-            console.log("An Error occured->",error)
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success("Account Activated")
+            setRoute("Login")
         }
-      }
-    },[isSuccess,error])
+        if (error) {
+            if ("data" in error) {
+                const errorData = error as any
+                toast.error(errorData.data.message)
+                setInvalidError(true)
+            } else {
+                console.log("An Error occured->", error)
+            }
+        }
+    }, [isSuccess, error,setRoute])
 
 
     const inputRefs = [
@@ -51,12 +51,12 @@ const Verification: FC<Props> = ({ setRoute }) => {
     })
 
     const VerificationHandle = async () => {
-        const verificationnumber=Object.values(verifyNumber).join("")
-        if(verificationnumber.length !== 4){
+        const verificationnumber = Object.values(verifyNumber).join("")
+        if (verificationnumber.length !== 4) {
             toast.error("Enter 4 digit number")
             return;
         }
-        await activation({activation_token:token,activation_code:verificationnumber})
+        await activation({ activation_token: token, activation_code: verificationnumber })
     }
 
     const handleInputChange = async (index: number, value: String) => {
@@ -87,7 +87,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
                 {
                     Object.keys(verifyNumber).map((key, index) => (
                         <input
-                        type='number'
+                            type='number'
                             key={key}
                             ref={inputRefs[index]}
                             className={`w-[45px] h-[45px] bg-transparent border-[2px] flex items-center justify-center text-black rounded-lg dark:text-white text-[18px] font-Poppins outline-none text-center ${invalidError ? "shake border-red-500" : "dark:border-white border-[#0000004a]"}`}

@@ -10,4 +10,4 @@ export const store = configureStore({
     },
     devTools: false, // so that we can use redux devtools but normal user can't 
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware)
-})
+}) 

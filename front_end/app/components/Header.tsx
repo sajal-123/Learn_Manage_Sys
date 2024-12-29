@@ -15,6 +15,7 @@ type Props = {
     activaItem: number
     route?: string,
     setRoute?: (route: string) => void
+    setActiveItem?: (activaItem: number) => void
 };
 
 const Header: FC<Props> = (props: Props) => {
@@ -51,7 +52,7 @@ const Header: FC<Props> = (props: Props) => {
                             </Link>
                         </div>
                         <div className="flex items-center gap-2">
-                            <NavItems activaItem={props.activaItem} isMobile={false} />
+                            <NavItems activaItem={props.activaItem} setActiveItem={props.setActiveItem} isMobile={false} />
                             <ThemeSwitcher />
 
                             {/* Only for mobile */}
@@ -72,7 +73,7 @@ const Header: FC<Props> = (props: Props) => {
                     openSideBar && (
                         <div className='fiexd w-full  h-screen top-0 left-0 z-[99999] dark:bg-[unset] bg-[#00000024]' onClick={(e) => HandleClose(e)} id='screen'>
                             <div className='w-[70%] fixed h-screen z-[9999999] bg-white dark:bg-slate-900 dark:opacity-90 top-20 right-0'>
-                                <NavItems activaItem={props.activaItem} isMobile={true} />
+                                <NavItems setActiveItem={props.setActiveItem} activaItem={props.activaItem} isMobile={true} />
                                 <HiOutlineUserCircle size={25} className='cursor-pointer ml-5 my-2 dark:text-white text-black' onClick={() => {
                                     props.setOpen(true)
                                     setOpenSidebar(false)

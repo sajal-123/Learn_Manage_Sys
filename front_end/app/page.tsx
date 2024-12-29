@@ -11,9 +11,9 @@ const Page: FC<Props> = (props) => {
   const [route,setRoute]=useState("Login")
 
   return (
-    <div>
+    <div >
       <Heading
-        title='ELearning'
+        title='E-Learning'
         description='A platform to learn and grow with fun'
         keywords='ReactJs,NextJs,MONGO_DB'
       />
@@ -22,6 +22,7 @@ const Page: FC<Props> = (props) => {
         setOpen={setOpen}
         activaItem={activeItem}
         route={route}
+        setActiveItem={setActiveItem}
         setRoute={setRoute}
       />
       <Hero/>

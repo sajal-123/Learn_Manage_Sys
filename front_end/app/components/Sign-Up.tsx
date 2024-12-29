@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { AiOutlineEye, AiOutlineEyeInvisible, AiFillGithub } from 'react-icons/ai'
 import { styles } from '../styles/style'
 import { FcGoogle } from 'react-icons/fc'
-import { useRegisterMutation } from '@/store/features/auth/authApi'
+import { useRegisterMutation } from '@/redux/features/auth/authApi'
 import toast from 'react-hot-toast'
 
 type Props = {
@@ -35,7 +35,7 @@ const SignUp: FC<Props> = ({ setRoute }) => {
                 toast.error(errorData.data.message);
             }
         }
-    }, [isSuccess, error]);
+    }, [isSuccess, error, data, setRoute]);
 
     const formik = useFormik({
         initialValues: { name: "", email: "", password: "" },
