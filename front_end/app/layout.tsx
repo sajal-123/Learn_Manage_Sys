@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import { Poppins } from "next/font/google";
 import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "./utils/Theme-provider";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "./utils/Theme-provider";
 import { Providers } from "./Provider";
 
 const poppins = Poppins({

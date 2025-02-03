@@ -130,10 +130,10 @@ export const createActivationToken = (user: any): IActivationToken => {
 export const ActivateUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { activation_token, activation_code } = req.body;
-
+        console.log(activation_code,activation_token,process.env.JWT_SECRET)
         const newUser: {
             user: IUser, activation_code: string
-        } = jwt.verify(activation_token, process.env.JWT_SECRET as string) as { user: IUser, activation_code: string }
+        } = jwt.verify(activation_token.ActivationToken, process.env.JWT_SECRET as string) as { user: IUser, activation_code: string }
 
 
         if (newUser.activation_code !== activation_code) {
@@ -152,7 +152,7 @@ export const ActivateUser = CatchAsyncError(async (req: Request, res: Response, 
             name,
             email,
             password
-        })
+                })
 
         return res.status(201).json({
             success: true

@@ -6,8 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible, AiFillGithub } from 'react-icons/a
 import { styles } from '../styles/style'
 import { FcGoogle } from 'react-icons/fc'
 import { useRegisterMutation } from '@/redux/features/auth/authApi'
-import toast from 'react-hot-toast'
-
+import { toast } from 'react-hot-toast';
 type Props = {
     setRoute: (route: string) => void
 }
@@ -20,7 +19,8 @@ const Schema = Yup.object().shape({
 
 const SignUp: FC<Props> = ({ setRoute }) => {
     const [show, setShow] = useState(false)
-    const [register, { data,error, isSuccess }] = useRegisterMutation();
+    const [register, { data, error, isSuccess }] = useRegisterMutation();
+    const [loading, setLoading] = useState(false)  // Loading state for the button
 
     useEffect(() => {
         if (isSuccess) {
@@ -31,10 +31,10 @@ const SignUp: FC<Props> = ({ setRoute }) => {
         if (error) {
             if ("data" in error) {
                 const errorData = error as any;
-                console.log(errorData)
                 toast.error(errorData.data.message);
             }
         }
+        setLoading(false);  // Reset loading state when response is received
     }, [isSuccess, error, data, setRoute]);
 
     const formik = useFormik({
@@ -43,12 +43,8 @@ const SignUp: FC<Props> = ({ setRoute }) => {
         onSubmit: async (values) => {
             const { name, email, password } = values
             console.log(name, email, password)
-            const data={
-                name,
-                email,
-                password
-            }
-            await register({name,email,password})
+            setLoading(true);  // Set loading to true when the request is sent
+            await register({ name, email, password })
         }
     })
 
@@ -116,9 +112,15 @@ const SignUp: FC<Props> = ({ setRoute }) => {
                     )}
                 </div>
 
-                <div className='w-full mt-5'>
-                    <input type="submit" value="Sign Up" className={`${styles.button}`} />
+                <div className='w-full mt-5' >
+                    <input 
+                        type="submit" 
+                        value={loading ? "Signing Up..." : "Sign Up"}  // Update button text
+                        className={`${styles.button}`} 
+                        disabled={loading}  // Disable button while loading
+                    />
                 </div>
+
 
                 <h5 className='text-center pt-4 text-Poppins text-[14px] text-black dark:text-white '>
                     Or join with

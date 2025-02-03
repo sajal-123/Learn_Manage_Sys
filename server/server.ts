@@ -1,38 +1,32 @@
+// app.js or main file where the server is initialized
 import { env } from './src/utils/EnviromentHandler';
 import { v2 as cloudinary } from 'cloudinary';
 import { app } from './app';
 import { connectDB } from './src/utils/DB';
-import { redis } from './src/utils/redis'; // Import your Redis client
 
 const port = env.port || 8000;
 
 // Cloudinary configuration
-cloudinary.config({
-  cloud_name: env.cloud.name,
-  api_key: env.cloud.apiKey,
-  api_secret: env.cloud.secretKey,
-});
+try {
+    cloudinary.config({
+        cloud_name: env.cloud.name,
+        api_key: env.cloud.apiKey,
+        api_secret: env.cloud.secretKey,
+    });
+} catch (error) {
+    console.error("Cloudinary configuration failed", error);
+    process.exit(1);
+}
 
 // Function to initialize Redis and database connection
-const startServer = async () => {
-  try {
-    // Initialize DB connection
-    await connectDB();
-    console.log('Connected to the database');
-
-    // Initialize Redis
-    await redis.ping();  // Ping to ensure Redis is connected
-    console.log('Redis is connected');
-
-    // Start the server
+connectDB()
+  .then(() => {
+    console.log("DB connected");
     app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
+      console.log(`App is listening at port ${port}`);
     });
-  } catch (err) {
-    console.error('Error while starting the server:', err);
-    process.exit(1);
-  }
-};
-
-// Call the function to start the server
-startServer();
+  })
+  .catch(err => {
+    console.error("Failed to connect to the database:", err);
+    process.exit(1); // Exit the process in case of failure
+  });

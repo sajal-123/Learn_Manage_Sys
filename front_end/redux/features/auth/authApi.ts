@@ -1,6 +1,6 @@
 import { apiSlice } from "../api/ApiSlice";
 import { userRegistration } from './authSlice';
-
+import { userLoggedIn } from "./authSlice";
 type RegistrationResponse = {
     message: string;
     activationToken: string;
@@ -23,20 +23,14 @@ export const authApi = apiSlice.injectEndpoints({
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     const result = await queryFulfilled;
-                    console.log(result)
-                    console.log("Register Query")
-                    // console.log(result.data.ActivationToken)
-                    // console.log(result.data.message)
-                    // console.log(result.data)
                     dispatch(
                         userRegistration({
-                            token: result.data
+                            token: result.data.activationToken
                         })
                     );
                 } catch (error: any) {
                     // Handle the error if needed
-                    console.log(process.env.NEXT_PUBLIC_SERVER_URI)
-                    console.log(error)
+                    console.log("error->",error)
                 }
             }
         }),
@@ -49,8 +43,31 @@ export const authApi = apiSlice.injectEndpoints({
                     activation_token, activation_code
                 }
             })
-        })
+        }),
+        login: builder.mutation({
+            query: ({email,password}) => ({
+                url: "/users/login",
+                method: "POST",
+                body: {email,password},
+                credentials: "include" as const, // Fixed spelling here
+            }), 
+            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await queryFulfilled;
+                    dispatch(
+                        userLoggedIn({
+                            accessToken: result.data.accessToken,
+                            user:result.data.user
+                        })
+                    );
+                } catch (error: any) {
+                    // Handle the error if needed
+                    console.log("error->",error)
+                }
+            }
+        }),
+
     })
 });
 
-export const { useRegisterMutation, useActivationMutation } = authApi;
+export const { useRegisterMutation, useActivationMutation, useLoginMutation } = authApi;
