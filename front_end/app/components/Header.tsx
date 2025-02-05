@@ -9,6 +9,10 @@ import { Login } from '../components/Login'
 import { CustomModal } from '../utils/CustomModel'
 import { SignUp } from './Sign-Up';
 import { Verification } from './Verification';
+import Avatar from '../../public/assets/Hero.png'
+import { useSelector } from 'react-redux';
+import Image from 'next/image';
+
 type Props = {
     open: boolean,
     setOpen: (open: boolean) => void,
@@ -21,6 +25,7 @@ type Props = {
 const Header: FC<Props> = (props: Props) => {
     const [active, setActive] = useState(false)
     const [openSideBar, setOpenSidebar] = useState(false)
+    const { user } = useSelector((state: any) => state.auth)
 
     if (typeof window !== 'undefined') {
         window.addEventListener("scroll", () => {
@@ -64,7 +69,13 @@ const Header: FC<Props> = (props: Props) => {
                                 }
                             </div>
                             {/* ---------------- */}
-                            <HiOutlineUserCircle size={25} className='800px:block hidden cursor-pointer dark:text-white text-black' onClick={() => props.setOpen(true)} />
+                            {user ?
+                                (
+                                    <Link href={'/profile'}>
+                                        <Image src={user.avatar ? user?.avatar : Avatar} alt='Hero Image' className='w-[30px] h-[30px] rounded-full cursor-pointer ' />
+                                    </Link>
+                                ) : (<HiOutlineUserCircle size={25} className='800px:block hidden cursor-pointer dark:text-white text-black' onClick={() => props.setOpen(true)} />)
+                            }
                         </div>
                     </div>
                 </div>
